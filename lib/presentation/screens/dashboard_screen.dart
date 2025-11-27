@@ -126,9 +126,7 @@ class DashboardScreen extends ConsumerWidget {
         content: TextField(
           controller: controller,
           decoration: InputDecoration(hintText: l10n.encounterName),
-          // autofocus: true, // Disabled to prevent potential crash on some devices
-          autocorrect: false,
-          enableSuggestions: false,
+          autofocus: true,
           keyboardType: TextInputType.text,
         ),
         actions: [
