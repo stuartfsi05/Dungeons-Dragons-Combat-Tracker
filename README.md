@@ -6,122 +6,82 @@ Bem-vindo ao **Rastreador de Combate D&D**! Este é um aplicativo móvel desenvo
 
 ---
 
-## 🚀 Funcionalidades
+## � Guia para Mestres (Como Usar)
 
-O aplicativo oferece um conjunto completo de ferramentas para o seu jogo:
-
-*   **⚔️ Gerenciamento de Combate**: Crie múltiplos encontros, salve-os e retome quando quiser. Nada é perdido se você fechar o app.
-*   **📝 Controle de Combatentes**: Adicione Jogadores (PCs) e Monstros (NPCs) com facilidade.
-*   **❤️ Rastreamento de Vida (HP)**: Ajuste a vida atual com botões rápidos (+/-) ou edite valores manualmente.
-    *   *Visualização de Dano*: A barra de vida muda de cor e tamanho.
-    *   *Estado de Morte*: Combatentes com 0 HP recebem um visual de caveira.
-*   **🔄 Sistema de Turnos Inteligente**:
-    *   **Iniciativa Automática**: A lista é ordenada automaticamente pela iniciativa.
-    *   **Controle de Rodadas**: O app conta as rodadas (Rounds) automaticamente.
-    *   **Destaque Ativo**: O combatente da vez é destacado com uma animação suave e brilho para fácil identificação.
-*   **🌎 Internacionalização (i18n)**:
-    *   Suporte completo para **Português do Brasil 🇧🇷** (Padrão).
-    *   Opção de troca para **Inglês 🇺🇸** a qualquer momento.
-*   **💾 Persistência de Dados**: Tudo é salvo localmente no seu dispositivo usando um banco de dados de alta performance (Isar).
-
----
-
-## 🛠️ Tecnologias Utilizadas
-
-Este projeto serve como um exemplo de arquitetura limpa e moderna em Flutter:
-
-*   **[Flutter](https://flutter.dev/)**: Framework UI do Google para criar interfaces nativas de alta qualidade.
-*   **[Riverpod](https://riverpod.dev/)**: Gerenciamento de estado robusto e reativo.
-*   **[Isar Database](https://isar.dev/)**: Banco de dados NoSQL super rápido para Flutter.
-*   **[Freezed & JSON Serializable](https://pub.dev/packages/freezed)**: Geração de código para imutabilidade e serialização (via build_runner).
-*   **[Flutter Localizations](https://docs.flutter.dev/ui/accessibility-and-localization/internationalization)**: Sistema nativo de tradução.
-
----
-
-## 📱 Como Usar o App
-
-O aplicativo foi desenhado para ser intuitivo. Aqui está um guia rápido:
+Este aplicativo é o seu escudo de mestre digital. Veja como é simples:
 
 ### 1. Criando um Combate
-Ao abrir o app, você verá a **Dashboard**.
-1.  Toque no botão **+** (canto inferior direito).
-2.  Digite um nome para o encontro (ex: "Emboscada dos Goblins").
-3.  Toque em **Criar**.
+*   Abra o app e clique no botão **+** no canto inferior.
+*   Dê um nome épico para a batalha (ex: *"A Toca do Dragão"*).
+*   Clique em **Criar**. Pronto, sua mesa está montada!
 
-### 2. Adicionando Combatentes
-Toque no combate criado para entrar na tela de detalhes.
-1.  Toque no botão **ADICIONAR COMBATENTE**.
-2.  Preencha os dados:
-    *   **Nome**: Ex: "Aragorn" ou "Goblin Arqueiro".
-    *   **Iniciativa**: O valor rolado no dado d20 + modificador.
-    *   **PV Máximo**: A vida total do personagem.
-    *   **É Jogador?**: Marque se for um personagem de jogador (PC) para diferenciar.
-3.  Toque em **Adicionar**. Repita para todos os participantes.
+### 2. Adicionando os Participantes
+Toque no nome do combate que você acabou de criar.
+*   Clique no botão laranja **ADICIONAR COMBATENTE**.
+*   Preencha a ficha rápida:
+    *   **Nome**: Quem é? (ex: *"Gandalf"* ou *"Goblin 1"*).
+    *   **Iniciativa**: Quanto tirou no dado d20? O app organiza a ordem sozinho!
+    *   **PV Máximo**: Quanta vida ele tem?
+    *   **É Jogador?**: Marque essa caixa se for um herói (PC). Se for monstro, deixe desmarcado.
+*   Repita para todos.
 
-### 3. Gerenciando o Combate
-*   **Iniciar**: O primeiro combatente da lista (maior iniciativa) já começa destacado.
-*   **Avançar Turno**: Toque em **PRÓXIMO TURNO** (botão laranja) para passar a vez.
-    *   Ao completar uma volta em todos os combatentes, o contador de **Rodada** (no topo) aumentará automaticamente.
-*   **Dano/Cura**: Use os botões de **+** e **-** no cartão do combatente para ajustar a vida.
-*   **Menu de Opções**: Toque nos três pontinhos (⋮) em qualquer cartão para **Editar** ou **Excluir** um combatente.
+### 3. Hora da Ação!
+*   **Quem joga agora?**: O personagem com a borda **Brilhante** e colorida é o ativo.
+*   **Passar a vez**: O turno acabou? Clique em **PRÓXIMO TURNO** (botão laranja). O app pula para o próximo e conta as rodadas automaticamente.
+*   **Levou Dano?**:
+    *   Use o botão **-** para tirar vida.
+    *   Use o botão **+** para curar.
+    *   Se a vida chegar a zero, uma **Caveira** aparece. 💀
 
-### 4. Trocando o Idioma
-Na tela inicial (Dashboard):
-1.  Toque no ícone de **Globo 🌐** na barra superior.
-2.  Escolha entre **Português (Brasil)** ou **English**.
+### 4. Personalize
+*   **Modo Escuro/Claro**: Clique no Sol/Lua no topo para descansar os olhos.
+*   **Idioma**: Clique no Globo 🌐 para mudar entre Português e Inglês.
 
 ---
 
-## 💻 Instalação e Execução (Para Desenvolvedores)
+## � Como Instalar no Android (Passo a Passo)
 
-Se você é um desenvolvedor e quer rodar este projeto na sua máquina:
+> **Nota**: Este aplicativo não está na Play Store. Você vai instalar o arquivo direto no seu celular (isso se chama *Sideload*).
+
+### Passo 1: Baixar o Aplicativo
+Peça para o desenvolvedor (ou quem te enviou este link) o arquivo **APK** do jogo.
+*   O arquivo geralmente se chama `app-release.apk`.
+
+### Passo 2: Instalar
+1.  Baixe o arquivo no seu celular.
+2.  Toque nele para abrir.
+3.  O celular pode perguntar: *"Deseja instalar apps desta fonte?"*.
+    *   Responda **Sim** ou **Permitir**.
+4.  Toque em **Instalar**.
+5.  Pronto! O ícone do **D&D Combat Tracker** vai aparecer na sua tela inicial.
+
+---
+
+## 💻 Para Desenvolvedores (Gerar o Instalador)
+
+Se você é quem está criando o app e quer mandar para seus amigos:
 
 ### Pré-requisitos
-*   [Flutter SDK](https://docs.flutter.dev/get-started/install) instalado e configurado.
-*   [Git](https://git-scm.com/) instalado.
+*   Ter o [Flutter](https://flutter.dev/) instalado no seu computador.
 
-### Passo a Passo
-
-1.  **Clone o repositório**:
-    ```bash
-    git clone https://github.com/seu-usuario/dnd-combat-tracker.git
-    cd dnd-combat-tracker
-    ```
-
-2.  **Instale as dependências**:
-    ```bash
-    flutter pub get
-    ```
-
-3.  **Gere os arquivos de código** (necessário para o banco de dados e gerenciamento de estado):
-    ```bash
-    dart run build_runner build --delete-conflicting-outputs
-    ```
-
-4.  **Execute o app**:
-    ```bash
-    flutter run
-    ```
-
-### Gerando o APK (Android)
-Para instalar no seu celular Android:
-1.  Conecte o celular via USB (com Depuração USB ativada).
-2.  Rode o comando:
-    ```bash
-    flutter install
-    ```
-3.  Ou gere o arquivo APK para enviar para o celular:
+### Como Gerar o APK (Arquivo de Instalação)
+1.  Abra o terminal na pasta do projeto.
+2.  Rode este comando:
     ```bash
     flutter build apk --release
     ```
-    O arquivo estará em: `build/app/outputs/flutter-apk/app-release.apk`
+3.  O computador vai pensar um pouco e criar o arquivo.
+4.  Você encontrará o arquivo mágico aqui:
+    `build/app/outputs/flutter-apk/app-release.apk`
+5.  **Envie este arquivo** para o celular via WhatsApp, Google Drive ou USB.
 
 ---
 
-## 🤝 Contribuição
-
-Contribuições são bem-vindas! Sinta-se à vontade para abrir *issues* reportando bugs ou sugerindo novas funcionalidades.
+## 🛠️ Tecnologias (Para Curiosos)
+*   Feito com **Flutter** (Google).
+*   Banco de dados **Isar** (Super rápido).
+*   Gerenciamento de estado **Riverpod**.
 
 ---
 
-*Desenvolvido com 💜 para a comunidade de RPG.*
+*Boas rolagens! 🎲*
