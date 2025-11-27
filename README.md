@@ -103,6 +103,19 @@ Se você é um desenvolvedor e quer rodar este projeto na sua máquina:
     flutter run
     ```
 
+### Gerando o APK (Android)
+Para instalar no seu celular Android:
+1.  Conecte o celular via USB (com Depuração USB ativada).
+2.  Rode o comando:
+    ```bash
+    flutter install
+    ```
+3.  Ou gere o arquivo APK para enviar para o celular:
+    ```bash
+    flutter build apk --release
+    ```
+    O arquivo estará em: `build/app/outputs/flutter-apk/app-release.apk`
+
 ---
 
 ## 🤝 Contribuição
