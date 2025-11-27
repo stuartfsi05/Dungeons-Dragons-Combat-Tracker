@@ -24,6 +24,20 @@ class IsarCombatRepository implements ICombatRepository {
   }
 
   @override
+  Future<Combat?> getCombat(int id) async {
+    return await isar.combats.get(id);
+  }
+
+  @override
+  Future<List<Combatant>> getCombatants(int combatId) async {
+    return await isar.combatants
+        .filter()
+        .combatIdEqualTo(combatId)
+        .sortByInitiativeDesc()
+        .findAll();
+  }
+
+  @override
   Future<void> addCombat(Combat combat) async {
     await isar.writeTxn(() async {
       await isar.combats.put(combat);

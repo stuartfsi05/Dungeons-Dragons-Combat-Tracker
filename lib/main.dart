@@ -4,10 +4,11 @@ import 'package:google_fonts/google_fonts.dart';
 import 'presentation/screens/dashboard_screen.dart';
 
 import 'package:flutter_localizations/flutter_localizations.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:dnd_combat_tracker/l10n/app_localizations.dart';
 import 'presentation/providers/theme_provider.dart';
 
 void main() {
+  WidgetsFlutterBinding.ensureInitialized();
   runApp(const ProviderScope(child: MyApp()));
 }
 

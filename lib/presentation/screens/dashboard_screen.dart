@@ -4,7 +4,7 @@ import 'package:google_fonts/google_fonts.dart';
 import '../providers/combat_controller.dart';
 import 'combat_detail_screen.dart';
 
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:dnd_combat_tracker/l10n/app_localizations.dart';
 import '../providers/theme_provider.dart';
 
 class DashboardScreen extends ConsumerWidget {
@@ -18,14 +18,19 @@ class DashboardScreen extends ConsumerWidget {
 
     return Scaffold(
       appBar: AppBar(
-        title: Text(l10n.appTitle, style: GoogleFonts.inter(fontWeight: FontWeight.bold)),
+        title: Text(l10n.appTitle,
+            style: GoogleFonts.inter(fontWeight: FontWeight.bold)),
         centerTitle: true,
         actions: [
           IconButton(
-            icon: Icon(themeMode == ThemeMode.dark ? Icons.light_mode : Icons.dark_mode),
+            icon: Icon(themeMode == ThemeMode.dark
+                ? Icons.light_mode
+                : Icons.dark_mode),
             onPressed: () {
-              ref.read(themeProvider.notifier).state = 
-                  themeMode == ThemeMode.dark ? ThemeMode.light : ThemeMode.dark;
+              ref.read(themeProvider.notifier).state =
+                  themeMode == ThemeMode.dark
+                      ? ThemeMode.light
+                      : ThemeMode.dark;
             },
           ),
           PopupMenuButton<Locale>(
@@ -67,16 +72,27 @@ class DashboardScreen extends ConsumerWidget {
                       key: Key(combat.id.toString()),
                       background: Container(color: Colors.red),
                       onDismissed: (_) {
-                        ref.read(combatControllerProvider.notifier).deleteCombat(combat.id);
+                        ref
+                            .read(combatControllerProvider.notifier)
+                            .deleteCombat(combat.id);
                       },
                       child: ListTile(
-                        title: Text(combat.name, style: GoogleFonts.inter(fontSize: 18)),
+                        title: Text(combat.name,
+                            style: GoogleFonts.inter(fontSize: 18)),
                         subtitle: Text('${l10n.round}: ${combat.roundCount}'),
-                        trailing: const Icon(Icons.arrow_forward_ios),
+                        trailing: IconButton(
+                          icon: const Icon(Icons.delete, color: Colors.red),
+                          onPressed: () {
+                            ref
+                                .read(combatControllerProvider.notifier)
+                                .deleteCombat(combat.id);
+                          },
+                        ),
                         onTap: () {
                           Navigator.of(context).push(
                             MaterialPageRoute(
-                              builder: (context) => CombatDetailScreen(combatId: combat.id, combatName: combat.name),
+                              builder: (context) => CombatDetailScreen(
+                                  combatId: combat.id, combatName: combat.name),
                             ),
                           );
                         },
@@ -102,7 +118,7 @@ class DashboardScreen extends ConsumerWidget {
   Future<void> _showAddCombatDialog(BuildContext context, WidgetRef ref) async {
     final controller = TextEditingController();
     final l10n = AppLocalizations.of(context)!;
-    
+
     await showDialog(
       context: context,
       builder: (context) => AlertDialog(
@@ -110,21 +126,45 @@ class DashboardScreen extends ConsumerWidget {
         content: TextField(
           controller: controller,
           decoration: InputDecoration(hintText: l10n.encounterName),
-          autofocus: true,
+          // autofocus: true, // Disabled to prevent potential crash on some devices
+          autocorrect: false,
+          enableSuggestions: false,
+          keyboardType: TextInputType.text,
         ),
         actions: [
           TextButton(
             onPressed: () => Navigator.pop(context),
-            child: Text(l10n.cancel),
+            child: Text(l10n.cancel, textAlign: TextAlign.center),
           ),
           TextButton(
-            onPressed: () {
+            onPressed: () async {
               if (controller.text.isNotEmpty) {
-                ref.read(combatControllerProvider.notifier).addCombat(controller.text);
-                Navigator.pop(context);
+                try {
+                  await ref
+                      .read(combatControllerProvider.notifier)
+                      .addCombat(controller.text);
+                  if (context.mounted) Navigator.pop(context);
+                } catch (e) {
+                  if (context.mounted) {
+                    Navigator.pop(context); // Close dialog first
+                    showDialog(
+                      context: context,
+                      builder: (context) => AlertDialog(
+                        title: const Text('Erro'),
+                        content: Text('Falha ao criar combate: $e'),
+                        actions: [
+                          TextButton(
+                            onPressed: () => Navigator.pop(context),
+                            child: const Text('OK', textAlign: TextAlign.center),
+                          ),
+                        ],
+                      ),
+                    );
+                  }
+                }
               }
             },
-            child: Text(l10n.create),
+            child: Text(l10n.create, textAlign: TextAlign.center),
           ),
         ],
       ),

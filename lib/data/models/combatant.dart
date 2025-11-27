@@ -19,4 +19,10 @@ class Combatant {
   late int hpMax;
 
   late bool isPlayer;
+
+  int armorClass = 10;
+
+  int hpTemp = 0;
+
+  List<String> conditions = [];
 }

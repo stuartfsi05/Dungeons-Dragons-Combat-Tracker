@@ -26,17 +26,39 @@ class CombatController extends _$CombatController {
     await repository.deleteCombat(id);
   }
 
-  Future<void> nextTurn(int combatId, int combatantCount) async {
-    if (combatantCount == 0) return;
-
+  Future<void> nextTurn(int combatId) async {
     final repository = await ref.read(combatRepositoryProvider.future);
-    final combats = await repository.getCombats();
-    final combat = combats.firstWhere((c) => c.id == combatId);
+    final combat = await repository.getCombat(combatId);
+    if (combat == null) return;
 
-    combat.currentTurnIndex++;
-    if (combat.currentTurnIndex >= combatantCount) {
-      combat.currentTurnIndex = 0;
+    final combatants = await repository.getCombatants(combatId);
+    if (combatants.isEmpty) return;
+
+    // Sort by initiative descending (matching UI)
+    combatants.sort((a, b) => b.initiative.compareTo(a.initiative));
+
+    int nextIndex = combat.currentTurnIndex + 1;
+    bool foundNext = false;
+
+    // Search for next alive combatant in current round
+    for (int i = nextIndex; i < combatants.length; i++) {
+      if (combatants[i].hpCurrent > 0) {
+        combat.currentTurnIndex = i;
+        foundNext = true;
+        break;
+      }
+    }
+
+    // If not found, wrap around to start (next round)
+    if (!foundNext) {
       combat.roundCount++;
+      combat.currentTurnIndex = 0; // Default to 0 if all dead
+      for (int i = 0; i < combatants.length; i++) {
+        if (combatants[i].hpCurrent > 0) {
+          combat.currentTurnIndex = i;
+          break;
+        }
+      }
     }
 
     await repository.updateCombat(combat);

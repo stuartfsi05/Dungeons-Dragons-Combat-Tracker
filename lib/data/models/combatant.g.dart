@@ -17,33 +17,48 @@ const CombatantSchema = CollectionSchema(
   name: r'Combatant',
   id: -8016044981967854124,
   properties: {
-    r'combatId': PropertySchema(
+    r'armorClass': PropertySchema(
       id: 0,
+      name: r'armorClass',
+      type: IsarType.long,
+    ),
+    r'combatId': PropertySchema(
+      id: 1,
       name: r'combatId',
       type: IsarType.long,
     ),
+    r'conditions': PropertySchema(
+      id: 2,
+      name: r'conditions',
+      type: IsarType.stringList,
+    ),
     r'hpCurrent': PropertySchema(
-      id: 1,
+      id: 3,
       name: r'hpCurrent',
       type: IsarType.long,
     ),
     r'hpMax': PropertySchema(
-      id: 2,
+      id: 4,
       name: r'hpMax',
       type: IsarType.long,
     ),
+    r'hpTemp': PropertySchema(
+      id: 5,
+      name: r'hpTemp',
+      type: IsarType.long,
+    ),
     r'initiative': PropertySchema(
-      id: 3,
+      id: 6,
       name: r'initiative',
       type: IsarType.long,
     ),
     r'isPlayer': PropertySchema(
-      id: 4,
+      id: 7,
       name: r'isPlayer',
       type: IsarType.bool,
     ),
     r'name': PropertySchema(
-      id: 5,
+      id: 8,
       name: r'name',
       type: IsarType.string,
     )
@@ -95,6 +110,13 @@ int _combatantEstimateSize(
   Map<Type, List<int>> allOffsets,
 ) {
   var bytesCount = offsets.last;
+  bytesCount += 3 + object.conditions.length * 3;
+  {
+    for (var i = 0; i < object.conditions.length; i++) {
+      final value = object.conditions[i];
+      bytesCount += value.length * 3;
+    }
+  }
   bytesCount += 3 + object.name.length * 3;
   return bytesCount;
 }
@@ -105,12 +127,15 @@ void _combatantSerialize(
   List<int> offsets,
   Map<Type, List<int>> allOffsets,
 ) {
-  writer.writeLong(offsets[0], object.combatId);
-  writer.writeLong(offsets[1], object.hpCurrent);
-  writer.writeLong(offsets[2], object.hpMax);
-  writer.writeLong(offsets[3], object.initiative);
-  writer.writeBool(offsets[4], object.isPlayer);
-  writer.writeString(offsets[5], object.name);
+  writer.writeLong(offsets[0], object.armorClass);
+  writer.writeLong(offsets[1], object.combatId);
+  writer.writeStringList(offsets[2], object.conditions);
+  writer.writeLong(offsets[3], object.hpCurrent);
+  writer.writeLong(offsets[4], object.hpMax);
+  writer.writeLong(offsets[5], object.hpTemp);
+  writer.writeLong(offsets[6], object.initiative);
+  writer.writeBool(offsets[7], object.isPlayer);
+  writer.writeString(offsets[8], object.name);
 }
 
 Combatant _combatantDeserialize(
@@ -120,13 +145,16 @@ Combatant _combatantDeserialize(
   Map<Type, List<int>> allOffsets,
 ) {
   final object = Combatant();
-  object.combatId = reader.readLong(offsets[0]);
-  object.hpCurrent = reader.readLong(offsets[1]);
-  object.hpMax = reader.readLong(offsets[2]);
+  object.armorClass = reader.readLong(offsets[0]);
+  object.combatId = reader.readLong(offsets[1]);
+  object.conditions = reader.readStringList(offsets[2]) ?? [];
+  object.hpCurrent = reader.readLong(offsets[3]);
+  object.hpMax = reader.readLong(offsets[4]);
+  object.hpTemp = reader.readLong(offsets[5]);
   object.id = id;
-  object.initiative = reader.readLong(offsets[3]);
-  object.isPlayer = reader.readBool(offsets[4]);
-  object.name = reader.readString(offsets[5]);
+  object.initiative = reader.readLong(offsets[6]);
+  object.isPlayer = reader.readBool(offsets[7]);
+  object.name = reader.readString(offsets[8]);
   return object;
 }
 
@@ -142,12 +170,18 @@ P _combatantDeserializeProp<P>(
     case 1:
       return (reader.readLong(offset)) as P;
     case 2:
-      return (reader.readLong(offset)) as P;
+      return (reader.readStringList(offset) ?? []) as P;
     case 3:
       return (reader.readLong(offset)) as P;
     case 4:
-      return (reader.readBool(offset)) as P;
+      return (reader.readLong(offset)) as P;
     case 5:
+      return (reader.readLong(offset)) as P;
+    case 6:
+      return (reader.readLong(offset)) as P;
+    case 7:
+      return (reader.readBool(offset)) as P;
+    case 8:
       return (reader.readString(offset)) as P;
     default:
       throw IsarError('Unknown property with id $propertyId');
@@ -441,6 +475,60 @@ extension CombatantQueryWhere
 
 extension CombatantQueryFilter
     on QueryBuilder<Combatant, Combatant, QFilterCondition> {
+  QueryBuilder<Combatant, Combatant, QAfterFilterCondition> armorClassEqualTo(
+      int value) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.equalTo(
+        property: r'armorClass',
+        value: value,
+      ));
+    });
+  }
+
+  QueryBuilder<Combatant, Combatant, QAfterFilterCondition>
+      armorClassGreaterThan(
+    int value, {
+    bool include = false,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.greaterThan(
+        include: include,
+        property: r'armorClass',
+        value: value,
+      ));
+    });
+  }
+
+  QueryBuilder<Combatant, Combatant, QAfterFilterCondition> armorClassLessThan(
+    int value, {
+    bool include = false,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.lessThan(
+        include: include,
+        property: r'armorClass',
+        value: value,
+      ));
+    });
+  }
+
+  QueryBuilder<Combatant, Combatant, QAfterFilterCondition> armorClassBetween(
+    int lower,
+    int upper, {
+    bool includeLower = true,
+    bool includeUpper = true,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.between(
+        property: r'armorClass',
+        lower: lower,
+        includeLower: includeLower,
+        upper: upper,
+        includeUpper: includeUpper,
+      ));
+    });
+  }
+
   QueryBuilder<Combatant, Combatant, QAfterFilterCondition> combatIdEqualTo(
       int value) {
     return QueryBuilder.apply(this, (query) {
@@ -491,6 +579,231 @@ extension CombatantQueryFilter
         upper: upper,
         includeUpper: includeUpper,
       ));
+    });
+  }
+
+  QueryBuilder<Combatant, Combatant, QAfterFilterCondition>
+      conditionsElementEqualTo(
+    String value, {
+    bool caseSensitive = true,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.equalTo(
+        property: r'conditions',
+        value: value,
+        caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<Combatant, Combatant, QAfterFilterCondition>
+      conditionsElementGreaterThan(
+    String value, {
+    bool include = false,
+    bool caseSensitive = true,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.greaterThan(
+        include: include,
+        property: r'conditions',
+        value: value,
+        caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<Combatant, Combatant, QAfterFilterCondition>
+      conditionsElementLessThan(
+    String value, {
+    bool include = false,
+    bool caseSensitive = true,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.lessThan(
+        include: include,
+        property: r'conditions',
+        value: value,
+        caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<Combatant, Combatant, QAfterFilterCondition>
+      conditionsElementBetween(
+    String lower,
+    String upper, {
+    bool includeLower = true,
+    bool includeUpper = true,
+    bool caseSensitive = true,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.between(
+        property: r'conditions',
+        lower: lower,
+        includeLower: includeLower,
+        upper: upper,
+        includeUpper: includeUpper,
+        caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<Combatant, Combatant, QAfterFilterCondition>
+      conditionsElementStartsWith(
+    String value, {
+    bool caseSensitive = true,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.startsWith(
+        property: r'conditions',
+        value: value,
+        caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<Combatant, Combatant, QAfterFilterCondition>
+      conditionsElementEndsWith(
+    String value, {
+    bool caseSensitive = true,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.endsWith(
+        property: r'conditions',
+        value: value,
+        caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<Combatant, Combatant, QAfterFilterCondition>
+      conditionsElementContains(String value, {bool caseSensitive = true}) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.contains(
+        property: r'conditions',
+        value: value,
+        caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<Combatant, Combatant, QAfterFilterCondition>
+      conditionsElementMatches(String pattern, {bool caseSensitive = true}) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.matches(
+        property: r'conditions',
+        wildcard: pattern,
+        caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<Combatant, Combatant, QAfterFilterCondition>
+      conditionsElementIsEmpty() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.equalTo(
+        property: r'conditions',
+        value: '',
+      ));
+    });
+  }
+
+  QueryBuilder<Combatant, Combatant, QAfterFilterCondition>
+      conditionsElementIsNotEmpty() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.greaterThan(
+        property: r'conditions',
+        value: '',
+      ));
+    });
+  }
+
+  QueryBuilder<Combatant, Combatant, QAfterFilterCondition>
+      conditionsLengthEqualTo(int length) {
+    return QueryBuilder.apply(this, (query) {
+      return query.listLength(
+        r'conditions',
+        length,
+        true,
+        length,
+        true,
+      );
+    });
+  }
+
+  QueryBuilder<Combatant, Combatant, QAfterFilterCondition>
+      conditionsIsEmpty() {
+    return QueryBuilder.apply(this, (query) {
+      return query.listLength(
+        r'conditions',
+        0,
+        true,
+        0,
+        true,
+      );
+    });
+  }
+
+  QueryBuilder<Combatant, Combatant, QAfterFilterCondition>
+      conditionsIsNotEmpty() {
+    return QueryBuilder.apply(this, (query) {
+      return query.listLength(
+        r'conditions',
+        0,
+        false,
+        999999,
+        true,
+      );
+    });
+  }
+
+  QueryBuilder<Combatant, Combatant, QAfterFilterCondition>
+      conditionsLengthLessThan(
+    int length, {
+    bool include = false,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.listLength(
+        r'conditions',
+        0,
+        true,
+        length,
+        include,
+      );
+    });
+  }
+
+  QueryBuilder<Combatant, Combatant, QAfterFilterCondition>
+      conditionsLengthGreaterThan(
+    int length, {
+    bool include = false,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.listLength(
+        r'conditions',
+        length,
+        include,
+        999999,
+        true,
+      );
+    });
+  }
+
+  QueryBuilder<Combatant, Combatant, QAfterFilterCondition>
+      conditionsLengthBetween(
+    int lower,
+    int upper, {
+    bool includeLower = true,
+    bool includeUpper = true,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.listLength(
+        r'conditions',
+        lower,
+        includeLower,
+        upper,
+        includeUpper,
+      );
     });
   }
 
@@ -593,6 +906,59 @@ extension CombatantQueryFilter
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(FilterCondition.between(
         property: r'hpMax',
+        lower: lower,
+        includeLower: includeLower,
+        upper: upper,
+        includeUpper: includeUpper,
+      ));
+    });
+  }
+
+  QueryBuilder<Combatant, Combatant, QAfterFilterCondition> hpTempEqualTo(
+      int value) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.equalTo(
+        property: r'hpTemp',
+        value: value,
+      ));
+    });
+  }
+
+  QueryBuilder<Combatant, Combatant, QAfterFilterCondition> hpTempGreaterThan(
+    int value, {
+    bool include = false,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.greaterThan(
+        include: include,
+        property: r'hpTemp',
+        value: value,
+      ));
+    });
+  }
+
+  QueryBuilder<Combatant, Combatant, QAfterFilterCondition> hpTempLessThan(
+    int value, {
+    bool include = false,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.lessThan(
+        include: include,
+        property: r'hpTemp',
+        value: value,
+      ));
+    });
+  }
+
+  QueryBuilder<Combatant, Combatant, QAfterFilterCondition> hpTempBetween(
+    int lower,
+    int upper, {
+    bool includeLower = true,
+    bool includeUpper = true,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.between(
+        property: r'hpTemp',
         lower: lower,
         includeLower: includeLower,
         upper: upper,
@@ -856,6 +1222,18 @@ extension CombatantQueryLinks
     on QueryBuilder<Combatant, Combatant, QFilterCondition> {}
 
 extension CombatantQuerySortBy on QueryBuilder<Combatant, Combatant, QSortBy> {
+  QueryBuilder<Combatant, Combatant, QAfterSortBy> sortByArmorClass() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'armorClass', Sort.asc);
+    });
+  }
+
+  QueryBuilder<Combatant, Combatant, QAfterSortBy> sortByArmorClassDesc() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'armorClass', Sort.desc);
+    });
+  }
+
   QueryBuilder<Combatant, Combatant, QAfterSortBy> sortByCombatId() {
     return QueryBuilder.apply(this, (query) {
       return query.addSortBy(r'combatId', Sort.asc);
@@ -889,6 +1267,18 @@ extension CombatantQuerySortBy on QueryBuilder<Combatant, Combatant, QSortBy> {
   QueryBuilder<Combatant, Combatant, QAfterSortBy> sortByHpMaxDesc() {
     return QueryBuilder.apply(this, (query) {
       return query.addSortBy(r'hpMax', Sort.desc);
+    });
+  }
+
+  QueryBuilder<Combatant, Combatant, QAfterSortBy> sortByHpTemp() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'hpTemp', Sort.asc);
+    });
+  }
+
+  QueryBuilder<Combatant, Combatant, QAfterSortBy> sortByHpTempDesc() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'hpTemp', Sort.desc);
     });
   }
 
@@ -931,6 +1321,18 @@ extension CombatantQuerySortBy on QueryBuilder<Combatant, Combatant, QSortBy> {
 
 extension CombatantQuerySortThenBy
     on QueryBuilder<Combatant, Combatant, QSortThenBy> {
+  QueryBuilder<Combatant, Combatant, QAfterSortBy> thenByArmorClass() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'armorClass', Sort.asc);
+    });
+  }
+
+  QueryBuilder<Combatant, Combatant, QAfterSortBy> thenByArmorClassDesc() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'armorClass', Sort.desc);
+    });
+  }
+
   QueryBuilder<Combatant, Combatant, QAfterSortBy> thenByCombatId() {
     return QueryBuilder.apply(this, (query) {
       return query.addSortBy(r'combatId', Sort.asc);
@@ -964,6 +1366,18 @@ extension CombatantQuerySortThenBy
   QueryBuilder<Combatant, Combatant, QAfterSortBy> thenByHpMaxDesc() {
     return QueryBuilder.apply(this, (query) {
       return query.addSortBy(r'hpMax', Sort.desc);
+    });
+  }
+
+  QueryBuilder<Combatant, Combatant, QAfterSortBy> thenByHpTemp() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'hpTemp', Sort.asc);
+    });
+  }
+
+  QueryBuilder<Combatant, Combatant, QAfterSortBy> thenByHpTempDesc() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'hpTemp', Sort.desc);
     });
   }
 
@@ -1018,9 +1432,21 @@ extension CombatantQuerySortThenBy
 
 extension CombatantQueryWhereDistinct
     on QueryBuilder<Combatant, Combatant, QDistinct> {
+  QueryBuilder<Combatant, Combatant, QDistinct> distinctByArmorClass() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addDistinctBy(r'armorClass');
+    });
+  }
+
   QueryBuilder<Combatant, Combatant, QDistinct> distinctByCombatId() {
     return QueryBuilder.apply(this, (query) {
       return query.addDistinctBy(r'combatId');
+    });
+  }
+
+  QueryBuilder<Combatant, Combatant, QDistinct> distinctByConditions() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addDistinctBy(r'conditions');
     });
   }
 
@@ -1033,6 +1459,12 @@ extension CombatantQueryWhereDistinct
   QueryBuilder<Combatant, Combatant, QDistinct> distinctByHpMax() {
     return QueryBuilder.apply(this, (query) {
       return query.addDistinctBy(r'hpMax');
+    });
+  }
+
+  QueryBuilder<Combatant, Combatant, QDistinct> distinctByHpTemp() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addDistinctBy(r'hpTemp');
     });
   }
 
@@ -1064,9 +1496,21 @@ extension CombatantQueryProperty
     });
   }
 
+  QueryBuilder<Combatant, int, QQueryOperations> armorClassProperty() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addPropertyName(r'armorClass');
+    });
+  }
+
   QueryBuilder<Combatant, int, QQueryOperations> combatIdProperty() {
     return QueryBuilder.apply(this, (query) {
       return query.addPropertyName(r'combatId');
+    });
+  }
+
+  QueryBuilder<Combatant, List<String>, QQueryOperations> conditionsProperty() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addPropertyName(r'conditions');
     });
   }
 
@@ -1079,6 +1523,12 @@ extension CombatantQueryProperty
   QueryBuilder<Combatant, int, QQueryOperations> hpMaxProperty() {
     return QueryBuilder.apply(this, (query) {
       return query.addPropertyName(r'hpMax');
+    });
+  }
+
+  QueryBuilder<Combatant, int, QQueryOperations> hpTempProperty() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addPropertyName(r'hpTemp');
     });
   }
 
