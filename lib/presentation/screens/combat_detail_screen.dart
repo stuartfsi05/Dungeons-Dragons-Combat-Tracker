@@ -94,6 +94,8 @@ class CombatDetailScreen extends ConsumerWidget {
                                       onConditionTap: () =>
                                           _showConditionDialog(
                                               context, ref, combatant),
+                                      onTempHpTap: () => _showTempHpDialog(
+                                          context, ref, combatant),
                                     );
                                   },
                                 ),
@@ -200,6 +202,43 @@ class CombatDetailScreen extends ConsumerWidget {
   Future<void> _deleteCombatant(WidgetRef ref, int id) async {
     final repository = await ref.read(combatRepositoryProvider.future);
     await repository.deleteCombatant(id);
+  }
+
+  Future<void> _showTempHpDialog(
+      BuildContext context, WidgetRef ref, Combatant combatant) async {
+    final hpTempController =
+        TextEditingController(text: combatant.hpTemp.toString());
+    final l10n = AppLocalizations.of(context)!;
+
+    await showDialog(
+      context: context,
+      builder: (context) => AlertDialog(
+        title: Text('HP Temporário: ${combatant.name}'),
+        content: TextField(
+          controller: hpTempController,
+          decoration: const InputDecoration(labelText: 'HP Temp'),
+          keyboardType: TextInputType.number,
+          autofocus: true,
+        ),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.pop(context),
+            child: Text(l10n.cancel),
+          ),
+          TextButton(
+            onPressed: () async {
+              final repository =
+                  await ref.read(combatRepositoryProvider.future);
+              final hpTemp = int.tryParse(hpTempController.text) ?? 0;
+              final updatedCombatant = combatant..hpTemp = hpTemp;
+              await repository.updateCombatant(updatedCombatant);
+              if (context.mounted) Navigator.pop(context);
+            },
+            child: Text(l10n.save),
+          ),
+        ],
+      ),
+    );
   }
 
   Future<void> _showConditionDialog(

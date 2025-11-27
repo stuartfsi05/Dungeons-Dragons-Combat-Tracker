@@ -9,6 +9,7 @@ class CombatantCard extends StatefulWidget {
   final VoidCallback? onEdit;
   final VoidCallback? onDelete;
   final VoidCallback? onConditionTap;
+  final VoidCallback? onTempHpTap;
   final void Function(int) onMinus;
   final void Function(int) onPlus;
 
@@ -21,6 +22,7 @@ class CombatantCard extends StatefulWidget {
     this.onEdit,
     this.onDelete,
     this.onConditionTap,
+    this.onTempHpTap,
   });
 
   @override
@@ -107,6 +109,16 @@ class _CombatantCardState extends State<CombatantCard> {
                         ),
                       ),
                       const SizedBox(height: 4),
+                      if (widget.combatant.armorClass > 0) ...[
+                        Text(
+                          'CA ${widget.combatant.armorClass}',
+                          style: const TextStyle(
+                            fontSize: 10,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                        const SizedBox(height: 4),
+                      ],
                       Icon(
                         widget.combatant.isPlayer
                             ? Icons.person
@@ -133,45 +145,7 @@ class _CombatantCardState extends State<CombatantCard> {
                           ),
                         ),
                         const SizedBox(height: 4),
-                        // AC & Temp HP Row
-                        Row(
-                          children: [
-                            if (widget.combatant.armorClass > 0)
-                              Container(
-                                padding: const EdgeInsets.symmetric(
-                                    horizontal: 6, vertical: 2),
-                                decoration: BoxDecoration(
-                                  color: Colors.grey.withValues(alpha: 0.2),
-                                  borderRadius: BorderRadius.circular(4),
-                                ),
-                                child: Text(
-                                  'CA ${widget.combatant.armorClass}',
-                                  style: const TextStyle(
-                                      fontSize: 10,
-                                      fontWeight: FontWeight.bold),
-                                ),
-                              ),
-                            if (widget.combatant.armorClass > 0 &&
-                                widget.combatant.hpTemp > 0)
-                              const SizedBox(width: 8),
-                            if (widget.combatant.hpTemp > 0)
-                              Container(
-                                padding: const EdgeInsets.symmetric(
-                                    horizontal: 6, vertical: 2),
-                                decoration: BoxDecoration(
-                                  color: Colors.blue.withValues(alpha: 0.2),
-                                  borderRadius: BorderRadius.circular(4),
-                                ),
-                                child: Text(
-                                  '+${widget.combatant.hpTemp} TP',
-                                  style: const TextStyle(
-                                      fontSize: 10,
-                                      fontWeight: FontWeight.bold,
-                                      color: Colors.blue),
-                                ),
-                              ),
-                          ],
-                        ),
+                        // AC & Temp HP moved to other locations
                         if (widget.combatant.conditions.isNotEmpty)
                           Padding(
                             padding: const EdgeInsets.only(top: 4.0),
@@ -292,12 +266,23 @@ class _CombatantCardState extends State<CombatantCard> {
                       ),
                     ],
                   ),
-                  IconButton(
-                    icon: const Icon(Icons.label_outline),
-                    color: Colors.teal,
-                    constraints: const BoxConstraints(),
-                    padding: const EdgeInsets.all(8),
-                    onPressed: widget.onConditionTap,
+                  Column(
+                    children: [
+                      IconButton(
+                        icon: const Icon(Icons.shield_outlined),
+                        color: Colors.blue,
+                        constraints: const BoxConstraints(),
+                        padding: const EdgeInsets.all(8),
+                        onPressed: widget.onTempHpTap,
+                      ),
+                      IconButton(
+                        icon: const Icon(Icons.label_outline),
+                        color: Colors.teal,
+                        constraints: const BoxConstraints(),
+                        padding: const EdgeInsets.all(8),
+                        onPressed: widget.onConditionTap,
+                      ),
+                    ],
                   ),
                   PopupMenuButton<String>(
                     padding: EdgeInsets.zero,
