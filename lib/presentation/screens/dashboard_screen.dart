@@ -5,7 +5,7 @@ import '../providers/combat_controller.dart';
 import 'combat_detail_screen.dart';
 
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
-import '../providers/locale_provider.dart';
+import '../providers/theme_provider.dart';
 
 class DashboardScreen extends ConsumerWidget {
   const DashboardScreen({super.key});
@@ -14,12 +14,20 @@ class DashboardScreen extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final combatsAsync = ref.watch(combatControllerProvider);
     final l10n = AppLocalizations.of(context)!;
+    final themeMode = ref.watch(themeProvider);
 
     return Scaffold(
       appBar: AppBar(
         title: Text(l10n.appTitle, style: GoogleFonts.inter(fontWeight: FontWeight.bold)),
         centerTitle: true,
         actions: [
+          IconButton(
+            icon: Icon(themeMode == ThemeMode.dark ? Icons.light_mode : Icons.dark_mode),
+            onPressed: () {
+              ref.read(themeProvider.notifier).state = 
+                  themeMode == ThemeMode.dark ? ThemeMode.light : ThemeMode.dark;
+            },
+          ),
           PopupMenuButton<Locale>(
             icon: const Icon(Icons.language),
             onSelected: (locale) {

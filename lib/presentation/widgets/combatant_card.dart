@@ -51,10 +51,10 @@ class _CombatantCardState extends State<CombatantCard> {
         margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
         decoration: BoxDecoration(
           color: isDead 
-              ? Colors.grey[900]!.withOpacity(0.5) 
+              ? Theme.of(context).colorScheme.surface.withOpacity(0.5) 
               : widget.isActive 
                   ? Theme.of(context).colorScheme.primary.withOpacity(0.15)
-                  : Colors.grey[850],
+                  : Theme.of(context).cardColor,
           borderRadius: BorderRadius.circular(12),
           border: Border.all(
             color: widget.isActive 
@@ -115,7 +115,7 @@ class _CombatantCardState extends State<CombatantCard> {
                             Container(
                               height: 8,
                               decoration: BoxDecoration(
-                                color: Colors.grey[700],
+                                color: Theme.of(context).colorScheme.outlineVariant,
                                 borderRadius: BorderRadius.circular(4),
                               ),
                             ),
@@ -139,7 +139,7 @@ class _CombatantCardState extends State<CombatantCard> {
                           '${widget.combatant.hpCurrent} / ${widget.combatant.hpMax} HP',
                           style: GoogleFonts.inter(
                             fontSize: 12,
-                            color: Colors.grey[400],
+                            color: Theme.of(context).colorScheme.onSurfaceVariant,
                           ),
                         ),
                       ],

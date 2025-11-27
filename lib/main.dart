@@ -5,7 +5,7 @@ import 'presentation/screens/dashboard_screen.dart';
 
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
-import 'presentation/providers/locale_provider.dart';
+import 'presentation/providers/theme_provider.dart';
 
 void main() {
   runApp(const ProviderScope(child: MyApp()));
@@ -17,11 +17,27 @@ class MyApp extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final locale = ref.watch(localeProvider);
+    final themeMode = ref.watch(themeProvider);
 
     return MaterialApp(
       title: 'D&D Combat Tracker',
       debugShowCheckedModeBanner: false,
-      theme: ThemeData.dark().copyWith(
+      themeMode: themeMode,
+      theme: ThemeData.light().copyWith(
+        scaffoldBackgroundColor: Colors.white,
+        colorScheme: const ColorScheme.light(
+          primary: Color(0xFFE63946),
+          secondary: Color(0xFFE63946),
+          surface: Color(0xFFF5F5F5),
+        ),
+        textTheme: GoogleFonts.interTextTheme(ThemeData.light().textTheme),
+        useMaterial3: true,
+        appBarTheme: const AppBarTheme(
+          backgroundColor: Color(0xFFE63946),
+          foregroundColor: Colors.white,
+        ),
+      ),
+      darkTheme: ThemeData.dark().copyWith(
         scaffoldBackgroundColor: Colors.black,
         colorScheme: const ColorScheme.dark(
           primary: Color(0xFFE63946),
