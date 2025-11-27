@@ -8,6 +8,7 @@ class CombatantCard extends StatefulWidget {
   final bool isActive;
   final VoidCallback? onEdit;
   final VoidCallback? onDelete;
+  final VoidCallback? onConditionTap;
   final void Function(int) onMinus;
   final void Function(int) onPlus;
 
@@ -19,6 +20,7 @@ class CombatantCard extends StatefulWidget {
     this.isActive = false,
     this.onEdit,
     this.onDelete,
+    this.onConditionTap,
   });
 
   @override
@@ -285,13 +287,32 @@ class _CombatantCardState extends State<CombatantCard> {
                       ),
                     ],
                   ),
+                  IconButton(
+                    icon: const Icon(Icons.label_outline),
+                    color: Colors.purple,
+                    constraints: const BoxConstraints(),
+                    padding: const EdgeInsets.all(8),
+                    onPressed: widget.onConditionTap,
+                  ),
                   PopupMenuButton<String>(
                     padding: EdgeInsets.zero,
                     onSelected: (value) {
                       if (value == 'edit') widget.onEdit?.call();
                       if (value == 'delete') widget.onDelete?.call();
+                      if (value == 'condition') widget.onConditionTap?.call();
                     },
                     itemBuilder: (context) => [
+                      PopupMenuItem(
+                        value: 'condition',
+                        child: Row(
+                          children: [
+                            const Icon(Icons.label_outline,
+                                size: 20, color: Colors.black54),
+                            const SizedBox(width: 8),
+                            Text('Condições'),
+                          ],
+                        ),
+                      ),
                       PopupMenuItem(
                         value: 'edit',
                         child: Text(AppLocalizations.of(context)!.edit),

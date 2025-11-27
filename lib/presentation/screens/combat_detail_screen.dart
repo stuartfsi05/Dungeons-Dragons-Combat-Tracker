@@ -5,6 +5,7 @@ import '../../data/models/combatant.dart';
 import '../providers/combat_controller.dart';
 import '../providers/repository_providers.dart';
 import '../widgets/combatant_card.dart';
+import '../widgets/theme_toggle.dart';
 import 'package:dnd_combat_tracker/l10n/app_localizations.dart';
 
 class CombatDetailScreen extends ConsumerWidget {
@@ -40,7 +41,12 @@ class CombatDetailScreen extends ConsumerWidget {
                 ],
               );
             }),
-        actions: const [],
+        actions: [
+          const Padding(
+            padding: EdgeInsets.only(right: 8.0),
+            child: ThemeToggle(),
+          ),
+        ],
       ),
       body: repositoryAsync.when(
         data: (repository) {
@@ -85,6 +91,9 @@ class CombatDetailScreen extends ConsumerWidget {
                                           combatant: combatant),
                                       onDelete: () =>
                                           _deleteCombatant(ref, combatant.id),
+                                      onConditionTap: () =>
+                                          _showConditionDialog(
+                                              context, ref, combatant),
                                     );
                                   },
                                 ),
@@ -107,10 +116,10 @@ class CombatDetailScreen extends ConsumerWidget {
                                     ),
                                     onPressed: () =>
                                         _showCombatantDialog(context, ref),
-                                    child: Text(
-                                      l10n.addCombatant,
+                                    child: const Text(
+                                      'Adicionar',
                                       textAlign: TextAlign.center,
-                                      style: const TextStyle(
+                                      style: TextStyle(
                                           fontSize: 16,
                                           fontWeight: FontWeight.bold),
                                     ),
@@ -159,9 +168,31 @@ class CombatDetailScreen extends ConsumerWidget {
 
   Future<void> _updateHp(WidgetRef ref, Combatant combatant, int amount) async {
     final repository = await ref.read(combatRepositoryProvider.future);
-    final newHp = (combatant.hpCurrent + amount).clamp(0, combatant.hpMax);
+    
+    int newHpCurrent = combatant.hpCurrent;
+    int newHpTemp = combatant.hpTemp;
 
-    final updatedCombatant = combatant..hpCurrent = newHp;
+    if (amount < 0) {
+      // Damage: Absorb with Temp HP first
+      int damage = -amount;
+      if (newHpTemp > 0) {
+        if (newHpTemp >= damage) {
+          newHpTemp -= damage;
+          damage = 0;
+        } else {
+          damage -= newHpTemp;
+          newHpTemp = 0;
+        }
+      }
+      newHpCurrent = (newHpCurrent - damage).clamp(0, combatant.hpMax);
+    } else {
+      // Healing: Apply to HP Current
+      newHpCurrent = (newHpCurrent + amount).clamp(0, combatant.hpMax);
+    }
+
+    final updatedCombatant = combatant
+      ..hpCurrent = newHpCurrent
+      ..hpTemp = newHpTemp;
 
     await repository.updateCombatant(updatedCombatant);
   }
@@ -169,6 +200,86 @@ class CombatDetailScreen extends ConsumerWidget {
   Future<void> _deleteCombatant(WidgetRef ref, int id) async {
     final repository = await ref.read(combatRepositoryProvider.future);
     await repository.deleteCombatant(id);
+  }
+
+  Future<void> _showConditionDialog(
+      BuildContext context, WidgetRef ref, Combatant combatant) async {
+    final conditionsController = TextEditingController();
+    List<String> conditions = List.from(combatant.conditions);
+    final l10n = AppLocalizations.of(context)!;
+
+    await showDialog(
+      context: context,
+      builder: (context) => StatefulBuilder(
+        builder: (context, setState) => AlertDialog(
+          title: Text('Condições: ${combatant.name}'),
+          content: SingleChildScrollView(
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                TextField(
+                  controller: conditionsController,
+                  decoration: InputDecoration(
+                    labelText: 'Adicionar (ex: Envenenado)',
+                    suffixIcon: IconButton(
+                      icon: const Icon(Icons.add),
+                      onPressed: () {
+                        if (conditionsController.text.isNotEmpty) {
+                          setState(() {
+                            conditions.add(conditionsController.text);
+                            conditionsController.clear();
+                          });
+                        }
+                      },
+                    ),
+                  ),
+                  onSubmitted: (value) {
+                    if (value.isNotEmpty) {
+                      setState(() {
+                        conditions.add(value);
+                        conditionsController.clear();
+                      });
+                    }
+                  },
+                ),
+                const SizedBox(height: 16),
+                Wrap(
+                  spacing: 8,
+                  runSpacing: 8,
+                  children: conditions
+                      .map((c) => Chip(
+                            label: Text(c),
+                            deleteIcon: const Icon(Icons.close, size: 18),
+                            onDeleted: () {
+                              setState(() {
+                                conditions.remove(c);
+                              });
+                            },
+                          ))
+                      .toList(),
+                ),
+              ],
+            ),
+          ),
+          actions: [
+            TextButton(
+              onPressed: () => Navigator.pop(context),
+              child: Text(l10n.cancel),
+            ),
+            TextButton(
+              onPressed: () async {
+                final repository =
+                    await ref.read(combatRepositoryProvider.future);
+                final updatedCombatant = combatant..conditions = conditions;
+                await repository.updateCombatant(updatedCombatant);
+                if (context.mounted) Navigator.pop(context);
+              },
+              child: Text(l10n.save),
+            ),
+          ],
+        ),
+      ),
+    );
   }
 
   Future<void> _showCombatantDialog(BuildContext context, WidgetRef ref,
