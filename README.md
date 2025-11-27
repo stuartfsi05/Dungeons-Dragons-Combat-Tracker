@@ -1,87 +1,109 @@
-# Rastreador de Combate D&D (D&D Combat Tracker)
+# 🐉 Rastreador de Combate D&D (D&D Combat Tracker)
 
-Bem-vindo ao **Rastreador de Combate D&D**! Este é um aplicativo móvel desenvolvido em Flutter para ajudar Mestres de RPG (Dungeon Masters) a gerenciar encontros de combate na 5ª Edição (e na atualização de 2024) de Dungeons & Dragons de forma rápida, eficiente e moderna.
+Bem-vindo ao **Rastreador de Combate D&D**! Este é o seu assistente digital definitivo para gerenciar encontros de RPG (Dungeons & Dragons 5e e 2024).
 
-> **Nota**: Este projeto foi desenvolvido com foco na experiência do usuário e performance, utilizando as melhores práticas de desenvolvimento mobile em Novembro de 2025.
+Desenvolvido para ser **rápido**, **intuitivo** e **bonito**, ele permite que você foque na narrativa enquanto o app cuida da matemática e da ordem dos turnos.
 
 ---
 
-## � Guia para Mestres (Como Usar)
+## ✨ Funcionalidades Principais
 
-Este aplicativo é o seu escudo de mestre digital. Veja como é simples:
+*   **Gerenciamento de Iniciativa**: Ordenação automática de turnos baseada na rolagem de dados.
+*   **Controle de Vida (HP)**:
+    *   Dano e Cura rápidos.
+    *   **Sistema de HP Temporário**: O dano é descontado primeiro do HP Temporário (Escudo) antes de afetar a vida real.
+*   **Condições e Status**: Adicione etiquetas coloridas (ex: *Envenenado*, *Invisível*) para não esquecer nada.
+*   **Visualização Clara**:
+    *   **CA (Classe de Armadura)** sempre visível.
+    *   Diferenciação visual entre **Jogadores** (ícone de pessoa) e **Inimigos** (ícone de robô/monstro).
+    *   Indicador de **Turno Ativo** com borda brilhante.
+*   **Temas**: Alterne entre **Modo Claro** e **Modo Escuro** para maior conforto visual.
+*   **Ícone Personalizado**: Gatinho com D20 para dar sorte nas rolagens! 🐱🎲
+
+---
+
+## 📖 Guia do Mestre (Como Usar)
 
 ### 1. Criando um Combate
-*   Abra o app e clique no botão **+** no canto inferior.
-*   Dê um nome épico para a batalha (ex: *"A Toca do Dragão"*).
-*   Clique em **Criar**. Pronto, sua mesa está montada!
+1.  Na tela inicial, toque no botão **+**.
+2.  Dê um nome para o encontro (ex: *"Emboscada na Floresta"*).
+3.  Toque em **Criar**.
 
-### 2. Adicionando os Participantes
-Toque no nome do combate que você acabou de criar.
-*   Clique no botão laranja **ADICIONAR COMBATENTE**.
-*   Preencha a ficha rápida:
-    *   **Nome**: Quem é? (ex: *"Gandalf"* ou *"Goblin 1"*).
-    *   **Iniciativa**: Quanto tirou no dado d20? O app organiza a ordem sozinho!
-    *   **PV Máximo**: Quanta vida ele tem?
-    *   **É Jogador?**: Marque essa caixa se for um herói (PC). Se for monstro, deixe desmarcado.
-*   Repita para todos.
+### 2. Adicionando Combatentes
+Dentro do combate, toque em **ADICIONAR** (botão azul) para incluir participantes:
+*   **Nome**: Identificação do personagem ou monstro.
+*   **Iniciativa**: Valor total da rolagem de iniciativa.
+*   **CA (Classe de Armadura)**: A defesa do alvo.
+*   **PV Máximo**: Pontos de vida totais.
+*   **HP Temp**: (Opcional) Pontos de vida temporários iniciais.
+*   **É Jogador?**: Marque se for um PC (Player Character).
 
-### 3. Hora da Ação!
-*   **Quem joga agora?**: O personagem com a borda **Brilhante** e colorida é o ativo.
-*   **Passar a vez**: O turno acabou? Clique em **PRÓXIMO TURNO** (botão laranja). O app pula para o próximo e conta as rodadas automaticamente.
-*   **Levou Dano?**:
-    *   Use o botão **-** para tirar vida.
-    *   Use o botão **+** para curar.
-    *   Se a vida chegar a zero, uma **Caveira** aparece. 💀
+### 3. Durante o Combate (A Ficha do Personagem)
+Cada combatente é representado por um cartão com várias informações e controles:
 
-### 4. Personalize
-*   **Modo Escuro/Claro**: Clique no Sol/Lua no topo para descansar os olhos.
-*   **Idioma**: Clique no Globo 🌐 para mudar entre Português e Inglês.
+#### **Esquerda (Status)**
+*   **Círculo Colorido**: Mostra o valor da **Iniciativa**.
+*   **CA**: Logo abaixo, mostra a Classe de Armadura.
+*   **Ícone**: Indica se é Jogador (Pessoa) ou Inimigo (Robô).
+
+#### **Centro (Informações)**
+*   **Nome**: Nome do combatente.
+*   **Barra de Vida**: Verde (saudável) ou Vermelha (morto).
+*   **Etiquetas**:
+    *   **Escudo Azul (+TP)**: Indica quanto HP Temporário o alvo tem.
+    *   **Etiqueta Verde-Água**: Mostra as condições ativas (ex: *Surdo*, *Cego*).
+
+#### **Direita (Controles)**
+Aqui você tem o controle total com botões organizados:
+
+1.  **Controle de Vida (Círculos)**:
+    *   🔴 **Botão Menos (-)**: Causa dano.
+    *   🟢 **Botão Mais (+)**: Cura.
+    *   **Caixa de Texto**: Digite o valor aqui antes de clicar no + ou -.
+    *   *Dica: Se o alvo tiver HP Temporário, o dano será descontado dele primeiro automaticamente!*
+
+2.  **Ações Rápidas (Ícones)**:
+    *   🛡️ **Escudo Azul**: Abre uma janela rápida para adicionar/remover **HP Temporário**.
+    *   🏷️ **Etiqueta Verde**: Abre uma janela rápida para adicionar/remover **Condições**.
+
+3.  **Menu (Três Pontos)**:
+    *   Opções para **Editar** a ficha completa ou **Remover** o combatente.
+
+### 4. Gerenciando Turnos
+*   O combatente da vez fica com uma **borda colorida brilhante**.
+*   Ao terminar o turno, clique no botão laranja **PRÓXIMO TURNO**.
+*   O app avança para o próximo da lista e conta as rodadas automaticamente.
+*   *Nota: Combatentes com 0 HP são pulados automaticamente.*
 
 ---
 
-## � Como Instalar no Android (Passo a Passo)
+## 📲 Como Instalar (Android)
 
-> **Nota**: Este aplicativo não está na Play Store. Você vai instalar o arquivo direto no seu celular (isso se chama *Sideload*).
+Este aplicativo é distribuído via arquivo **APK** (instalação manual).
 
-### Passo 1: Baixar o Aplicativo
-Peça para o desenvolvedor (ou quem te enviou este link) o arquivo **APK** do jogo.
-*   O arquivo geralmente se chama `app-release.apk`.
-
-### Passo 2: Instalar
-1.  Baixe o arquivo no seu celular.
-2.  Toque nele para abrir.
-3.  O celular pode perguntar: *"Deseja instalar apps desta fonte?"*.
-    *   Responda **Sim** ou **Permitir**.
+1.  Receba o arquivo `app-release.apk`.
+2.  Toque no arquivo para abrir.
+3.  Se o celular perguntar, permita a instalação de **Fontes Desconhecidas**.
 4.  Toque em **Instalar**.
-5.  Pronto! O ícone do **D&D Combat Tracker** vai aparecer na sua tela inicial.
+5.  Procure pelo ícone do **Gatinho com D20** e divirta-se!
 
 ---
 
-## 💻 Para Desenvolvedores (Gerar o Instalador)
+## 🛠️ Para Desenvolvedores
 
-Se você é quem está criando o app e quer mandar para seus amigos:
+### Gerar APK de Release
+Para gerar uma nova versão do instalador:
+```bash
+flutter build apk --release --no-tree-shake-icons
+```
+O arquivo será gerado em: `build/app/outputs/flutter-apk/app-release.apk`
 
-### Pré-requisitos
-*   Ter o [Flutter](https://flutter.dev/) instalado no seu computador.
-
-### Como Gerar o APK (Arquivo de Instalação)
-1.  Abra o terminal na pasta do projeto.
-2.  Rode este comando:
-    ```bash
-    flutter build apk --release
-    ```
-3.  O computador vai pensar um pouco e criar o arquivo.
-4.  Você encontrará o arquivo mágico aqui:
-    `build/app/outputs/flutter-apk/app-release.apk`
-5.  **Envie este arquivo** para o celular via WhatsApp, Google Drive ou USB.
+### Tecnologias
+*   **Flutter** (UI Toolkit)
+*   **Riverpod** (Gerenciamento de Estado)
+*   **Isar** (Banco de Dados Local)
+*   **Google Fonts** (Tipografia)
 
 ---
 
-## 🛠️ Tecnologias (Para Curiosos)
-*   Feito com **Flutter** (Google).
-*   Banco de dados **Isar** (Super rápido).
-*   Gerenciamento de estado **Riverpod**.
-
----
-
-*Boas rolagens! 🎲*
+*Que os dados rolem sempre a seu favor! (Ou não, sou o Mestre afinal... 😈)*
