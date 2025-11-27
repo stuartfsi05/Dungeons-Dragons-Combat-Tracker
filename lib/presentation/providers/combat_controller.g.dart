@@ -6,7 +6,7 @@ part of 'combat_controller.dart';
 // RiverpodGenerator
 // **************************************************************************
 
-String _$combatControllerHash() => r'c288a46354f5702515a19c5e7ffc4b2416bbce71';
+String _$combatControllerHash() => r'ba1a2c089b703b37119b6a9319edb67b0db9189b';
 
 /// See also [CombatController].
 @ProviderFor(CombatController)
