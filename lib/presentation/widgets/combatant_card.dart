@@ -132,6 +132,46 @@ class _CombatantCardState extends State<CombatantCard> {
                                 isDead ? TextDecoration.lineThrough : null,
                           ),
                         ),
+                        const SizedBox(height: 4),
+                        // AC & Temp HP Row
+                        Row(
+                          children: [
+                            if (widget.combatant.armorClass > 0)
+                              Container(
+                                padding: const EdgeInsets.symmetric(
+                                    horizontal: 6, vertical: 2),
+                                decoration: BoxDecoration(
+                                  color: Colors.grey.withValues(alpha: 0.2),
+                                  borderRadius: BorderRadius.circular(4),
+                                ),
+                                child: Text(
+                                  'CA ${widget.combatant.armorClass}',
+                                  style: const TextStyle(
+                                      fontSize: 10,
+                                      fontWeight: FontWeight.bold),
+                                ),
+                              ),
+                            if (widget.combatant.armorClass > 0 &&
+                                widget.combatant.hpTemp > 0)
+                              const SizedBox(width: 8),
+                            if (widget.combatant.hpTemp > 0)
+                              Container(
+                                padding: const EdgeInsets.symmetric(
+                                    horizontal: 6, vertical: 2),
+                                decoration: BoxDecoration(
+                                  color: Colors.blue.withValues(alpha: 0.2),
+                                  borderRadius: BorderRadius.circular(4),
+                                ),
+                                child: Text(
+                                  '+${widget.combatant.hpTemp} TP',
+                                  style: const TextStyle(
+                                      fontSize: 10,
+                                      fontWeight: FontWeight.bold,
+                                      color: Colors.blue),
+                                ),
+                              ),
+                          ],
+                        ),
                         if (widget.combatant.conditions.isNotEmpty)
                           Padding(
                             padding: const EdgeInsets.only(top: 4.0),
@@ -143,16 +183,18 @@ class _CombatantCardState extends State<CombatantCard> {
                                         padding: const EdgeInsets.symmetric(
                                             horizontal: 6, vertical: 2),
                                         decoration: BoxDecoration(
-                                          color: Colors.purple.withValues(alpha: 0.2),
-                                          borderRadius: BorderRadius.circular(4),
+                                          color: Colors.teal
+                                              .withValues(alpha: 0.2),
+                                          borderRadius:
+                                              BorderRadius.circular(4),
                                           border: Border.all(
-                                              color: Colors.purple, width: 1),
+                                              color: Colors.teal, width: 1),
                                         ),
                                         child: Text(
                                           c,
                                           style: const TextStyle(
                                               fontSize: 10,
-                                              color: Colors.purple),
+                                              color: Colors.teal),
                                         ),
                                       ))
                                   .toList(),
@@ -188,51 +230,14 @@ class _CombatantCardState extends State<CombatantCard> {
                           ],
                         ),
                         const SizedBox(height: 4),
-                        Row(
-                          children: [
-                            Text(
-                              '${widget.combatant.hpCurrent} / ${widget.combatant.hpMax} HP',
-                              style: GoogleFonts.inter(
-                                fontSize: 12,
-                                color: Theme.of(context)
-                                    .colorScheme
-                                    .onSurfaceVariant,
-                              ),
-                            ),
-                            const Spacer(),
-                            if (widget.combatant.armorClass > 0)
-                              Container(
-                                padding: const EdgeInsets.symmetric(
-                                    horizontal: 6, vertical: 2),
-                                decoration: BoxDecoration(
-                                  color: Colors.grey.withValues(alpha: 0.2),
-                                  borderRadius: BorderRadius.circular(4),
-                                ),
-                                child: Text(
-                                  'CA ${widget.combatant.armorClass}',
-                                  style: const TextStyle(
-                                      fontSize: 10, fontWeight: FontWeight.bold),
-                                ),
-                              ),
-                            if (widget.combatant.hpTemp > 0) ...[
-                              const SizedBox(width: 4),
-                              Container(
-                                padding: const EdgeInsets.symmetric(
-                                    horizontal: 6, vertical: 2),
-                                decoration: BoxDecoration(
-                                  color: Colors.blue.withValues(alpha: 0.2),
-                                  borderRadius: BorderRadius.circular(4),
-                                ),
-                                child: Text(
-                                  '+${widget.combatant.hpTemp} TP',
-                                  style: const TextStyle(
-                                      fontSize: 10,
-                                      fontWeight: FontWeight.bold,
-                                      color: Colors.blue),
-                                ),
-                              ),
-                            ],
-                          ],
+                        Text(
+                          '${widget.combatant.hpCurrent} / ${widget.combatant.hpMax} HP',
+                          style: GoogleFonts.inter(
+                            fontSize: 12,
+                            color: Theme.of(context)
+                                .colorScheme
+                                .onSurfaceVariant,
+                          ),
                         ),
                       ],
                     ),
@@ -289,7 +294,7 @@ class _CombatantCardState extends State<CombatantCard> {
                   ),
                   IconButton(
                     icon: const Icon(Icons.label_outline),
-                    color: Colors.purple,
+                    color: Colors.teal,
                     constraints: const BoxConstraints(),
                     padding: const EdgeInsets.all(8),
                     onPressed: widget.onConditionTap,
