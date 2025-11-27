@@ -146,32 +146,48 @@ class _CombatantCardState extends State<CombatantCard> {
                         ),
                         const SizedBox(height: 4),
                         // AC & Temp HP moved to other locations
-                        if (widget.combatant.conditions.isNotEmpty)
+                        if (widget.combatant.conditions.isNotEmpty ||
+                            widget.combatant.hpTemp > 0)
                           Padding(
                             padding: const EdgeInsets.only(top: 4.0),
                             child: Wrap(
                               spacing: 4,
                               runSpacing: 4,
-                              children: widget.combatant.conditions
-                                  .map((c) => Container(
-                                        padding: const EdgeInsets.symmetric(
-                                            horizontal: 6, vertical: 2),
-                                        decoration: BoxDecoration(
-                                          color: Colors.teal
-                                              .withValues(alpha: 0.2),
-                                          borderRadius:
-                                              BorderRadius.circular(4),
-                                          border: Border.all(
-                                              color: Colors.teal, width: 1),
-                                        ),
-                                        child: Text(
-                                          c,
-                                          style: const TextStyle(
-                                              fontSize: 10,
-                                              color: Colors.teal),
-                                        ),
-                                      ))
-                                  .toList(),
+                              children: [
+                                if (widget.combatant.hpTemp > 0)
+                                  Container(
+                                    padding: const EdgeInsets.symmetric(
+                                        horizontal: 6, vertical: 2),
+                                    decoration: BoxDecoration(
+                                      color: Colors.blue.withValues(alpha: 0.2),
+                                      borderRadius: BorderRadius.circular(4),
+                                    ),
+                                    child: Text(
+                                      '+${widget.combatant.hpTemp} TP',
+                                      style: const TextStyle(
+                                          fontSize: 10,
+                                          fontWeight: FontWeight.bold,
+                                          color: Colors.blue),
+                                    ),
+                                  ),
+                                ...widget.combatant.conditions.map(
+                                  (c) => Container(
+                                    padding: const EdgeInsets.symmetric(
+                                        horizontal: 6, vertical: 2),
+                                    decoration: BoxDecoration(
+                                      color: Colors.teal.withValues(alpha: 0.2),
+                                      borderRadius: BorderRadius.circular(4),
+                                      border: Border.all(
+                                          color: Colors.teal, width: 1),
+                                    ),
+                                    child: Text(
+                                      c,
+                                      style: const TextStyle(
+                                          fontSize: 10, color: Colors.teal),
+                                    ),
+                                  ),
+                                ),
+                              ],
                             ),
                           ),
                         const SizedBox(height: 8),
@@ -219,97 +235,104 @@ class _CombatantCardState extends State<CombatantCard> {
 
                   // Controls
                   const SizedBox(width: 8),
-                  Column(
+                  Row(
+                    crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Row(
-                        mainAxisSize: MainAxisSize.min,
+                      Column(
                         children: [
-                          IconButton(
-                            icon: const Icon(Icons.remove_circle_outline),
-                            color: Colors.redAccent,
-                            constraints: const BoxConstraints(),
-                            padding: const EdgeInsets.all(8),
-                            onPressed: () {
-                              final val = int.tryParse(_hpController.text);
-                              if (val != null) widget.onMinus(val);
-                            },
+                          Row(
+                            mainAxisSize: MainAxisSize.min,
+                            children: [
+                              IconButton(
+                                icon: const Icon(Icons.remove_circle_outline),
+                                color: Colors.redAccent,
+                                constraints: const BoxConstraints(),
+                                padding: const EdgeInsets.all(8),
+                                onPressed: () {
+                                  final val = int.tryParse(_hpController.text);
+                                  if (val != null) widget.onMinus(val);
+                                },
+                              ),
+                              IconButton(
+                                icon: const Icon(Icons.add_circle_outline),
+                                color: Colors.greenAccent,
+                                constraints: const BoxConstraints(),
+                                padding: const EdgeInsets.all(8),
+                                onPressed: () {
+                                  final val = int.tryParse(_hpController.text);
+                                  if (val != null) widget.onPlus(val);
+                                },
+                              ),
+                            ],
                           ),
-                          IconButton(
-                            icon: const Icon(Icons.add_circle_outline),
-                            color: Colors.greenAccent,
-                            constraints: const BoxConstraints(),
-                            padding: const EdgeInsets.all(8),
-                            onPressed: () {
-                              final val = int.tryParse(_hpController.text);
-                              if (val != null) widget.onPlus(val);
-                            },
+                          SizedBox(
+                            width: 50,
+                            height: 30,
+                            child: TextFormField(
+                              controller: _hpController,
+                              keyboardType: TextInputType.number,
+                              textAlign: TextAlign.center,
+                              decoration: const InputDecoration(
+                                hintText: '',
+                                isDense: true,
+                                contentPadding: EdgeInsets.symmetric(
+                                    horizontal: 4, vertical: 8),
+                                border: OutlineInputBorder(),
+                              ),
+                              onTapOutside: (_) =>
+                                  FocusManager.instance.primaryFocus?.unfocus(),
+                            ),
                           ),
                         ],
                       ),
-                      SizedBox(
-                        width: 50,
-                        height: 30,
-                        child: TextFormField(
-                          controller: _hpController,
-                          keyboardType: TextInputType.number,
-                          textAlign: TextAlign.center,
-                          decoration: const InputDecoration(
-                            hintText: '',
-                            isDense: true,
-                            contentPadding: EdgeInsets.symmetric(
-                                horizontal: 4, vertical: 8),
-                            border: OutlineInputBorder(),
+                      Column(
+                        children: [
+                          IconButton(
+                            icon: const Icon(Icons.shield_outlined),
+                            color: Colors.blue,
+                            constraints: const BoxConstraints(),
+                            padding: const EdgeInsets.all(8),
+                            onPressed: widget.onTempHpTap,
                           ),
-                          onTapOutside: (_) =>
-                              FocusManager.instance.primaryFocus?.unfocus(),
-                        ),
+                          IconButton(
+                            icon: const Icon(Icons.label_outline),
+                            color: Colors.teal,
+                            constraints: const BoxConstraints(),
+                            padding: const EdgeInsets.all(8),
+                            onPressed: widget.onConditionTap,
+                          ),
+                        ],
                       ),
-                    ],
-                  ),
-                  Column(
-                    children: [
-                      IconButton(
-                        icon: const Icon(Icons.shield_outlined),
-                        color: Colors.blue,
-                        constraints: const BoxConstraints(),
-                        padding: const EdgeInsets.all(8),
-                        onPressed: widget.onTempHpTap,
-                      ),
-                      IconButton(
-                        icon: const Icon(Icons.label_outline),
-                        color: Colors.teal,
-                        constraints: const BoxConstraints(),
-                        padding: const EdgeInsets.all(8),
-                        onPressed: widget.onConditionTap,
-                      ),
-                    ],
-                  ),
-                  PopupMenuButton<String>(
-                    padding: EdgeInsets.zero,
-                    onSelected: (value) {
-                      if (value == 'edit') widget.onEdit?.call();
-                      if (value == 'delete') widget.onDelete?.call();
-                      if (value == 'condition') widget.onConditionTap?.call();
-                    },
-                    itemBuilder: (context) => [
-                      PopupMenuItem(
-                        value: 'condition',
-                        child: Row(
-                          children: [
-                            const Icon(Icons.label_outline,
-                                size: 20, color: Colors.black54),
-                            const SizedBox(width: 8),
-                            Text('Condições'),
-                          ],
-                        ),
-                      ),
-                      PopupMenuItem(
-                        value: 'edit',
-                        child: Text(AppLocalizations.of(context)!.edit),
-                      ),
-                      PopupMenuItem(
-                        value: 'delete',
-                        child: Text(AppLocalizations.of(context)!.delete),
+                      PopupMenuButton<String>(
+                        padding: EdgeInsets.zero,
+                        onSelected: (value) {
+                          if (value == 'edit') widget.onEdit?.call();
+                          if (value == 'delete') widget.onDelete?.call();
+                          if (value == 'condition') {
+                            widget.onConditionTap?.call();
+                          }
+                        },
+                        itemBuilder: (context) => [
+                          PopupMenuItem(
+                            value: 'condition',
+                            child: Row(
+                              children: [
+                                const Icon(Icons.label_outline,
+                                    size: 20, color: Colors.black54),
+                                const SizedBox(width: 8),
+                                Text('Condições'),
+                              ],
+                            ),
+                          ),
+                          PopupMenuItem(
+                            value: 'edit',
+                            child: Text(AppLocalizations.of(context)!.edit),
+                          ),
+                          PopupMenuItem(
+                            value: 'delete',
+                            child: Text(AppLocalizations.of(context)!.delete),
+                          ),
+                        ],
                       ),
                     ],
                   ),
