@@ -121,9 +121,6 @@ class DashboardScreen extends ConsumerWidget {
       MaterialPageRoute(
         builder: (context) => const CreateCombatScreen(),
       ),
-          );
-        }
-      }
-    }
+    );
   }
 }
