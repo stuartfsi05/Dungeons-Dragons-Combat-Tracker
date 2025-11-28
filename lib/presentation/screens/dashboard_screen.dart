@@ -121,23 +121,6 @@ class DashboardScreen extends ConsumerWidget {
       MaterialPageRoute(
         builder: (context) => const CreateCombatScreen(),
       ),
-    );
-  }
-
-  Future<void> _createCombat(
-      BuildContext context, WidgetRef ref, TextEditingController controller) async {
-    if (controller.text.isNotEmpty) {
-      try {
-        await ref
-            .read(combatControllerProvider.notifier)
-            .addCombat(controller.text);
-        if (context.mounted) Navigator.pop(context);
-      } catch (e) {
-        if (context.mounted) {
-          // Close the bottom sheet if open, or show error on top
-          // For simplicity, we just show a snackbar or dialog here
-          ScaffoldMessenger.of(context).showSnackBar(
-            SnackBar(content: Text('Erro: $e')),
           );
         }
       }
