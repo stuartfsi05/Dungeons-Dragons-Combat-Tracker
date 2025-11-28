@@ -94,14 +94,14 @@ Este aplicativo é distribuído via arquivo **APK** (instalação manual).
 ### Gerar APK de Release
 Para gerar uma nova versão do instalador:
 ```bash
-flutter build apk --release --no-tree-shake-icons
+flutter build apk --release
 ```
 O arquivo será gerado em: `build/app/outputs/flutter-apk/app-release.apk`
 
 ### Tecnologias
 *   **Flutter** (UI Toolkit)
 *   **Riverpod** (Gerenciamento de Estado)
-*   **Isar** (Banco de Dados Local)
+*   **Hive** (Banco de Dados Local NoSQL)
 *   **Google Fonts** (Tipografia)
 
 ---
