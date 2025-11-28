@@ -6,21 +6,7 @@ part of 'repository_providers.dart';
 // RiverpodGenerator
 // **************************************************************************
 
-String _$isarHash() => r'dc0dd0787765dc89fe50915b82529fb3ae984960';
-
-/// See also [isar].
-@ProviderFor(isar)
-final isarProvider = FutureProvider<Isar>.internal(
-  isar,
-  name: r'isarProvider',
-  debugGetCreateSourceHash:
-      const bool.fromEnvironment('dart.vm.product') ? null : _$isarHash,
-  dependencies: null,
-  allTransitiveDependencies: null,
-);
-
-typedef IsarRef = FutureProviderRef<Isar>;
-String _$combatRepositoryHash() => r'ecabf1ebd571f97dd245709820c0b675d8d6aa49';
+String _$combatRepositoryHash() => r'c08ef6128c31fcc78c44d53bdb037174e0efcf51';
 
 /// See also [combatRepository].
 @ProviderFor(combatRepository)

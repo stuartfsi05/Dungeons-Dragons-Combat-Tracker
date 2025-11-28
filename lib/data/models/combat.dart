@@ -1,24 +1,33 @@
-import 'package:isar/isar.dart';
+import 'package:hive/hive.dart';
 
 part 'combat.g.dart';
 
-@collection
-class Combat {
-  Id id = Isar.autoIncrement;
+@HiveType(typeId: 0)
+class Combat extends HiveObject {
+  // Hive auto-generates keys, so we don't need an explicit Id field for storage,
+  // but we can use the key as the ID.
+  int get id => key as int;
 
+  @HiveField(0)
   late String name;
 
+  @HiveField(1)
   late DateTime createdAt;
 
-  @enumerated
+  @HiveField(2)
   late CombatStatus status;
 
+  @HiveField(3)
   int roundCount = 1;
 
+  @HiveField(4)
   int currentTurnIndex = 0;
 }
 
+@HiveType(typeId: 2)
 enum CombatStatus {
+  @HiveField(0)
   active,
+  @HiveField(1)
   finished,
 }

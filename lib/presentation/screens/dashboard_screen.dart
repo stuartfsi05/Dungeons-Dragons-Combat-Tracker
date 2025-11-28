@@ -3,6 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:google_fonts/google_fonts.dart';
 import '../providers/combat_controller.dart';
 import 'combat_detail_screen.dart';
+import 'create_combat_screen.dart';
 
 import 'package:dnd_combat_tracker/l10n/app_localizations.dart';
 import '../providers/theme_provider.dart';
@@ -115,57 +116,31 @@ class DashboardScreen extends ConsumerWidget {
     );
   }
 
-  Future<void> _showAddCombatDialog(BuildContext context, WidgetRef ref) async {
-    final controller = TextEditingController();
-    final l10n = AppLocalizations.of(context)!;
-
-    await showDialog(
-      context: context,
-      builder: (context) => AlertDialog(
-        title: Text(l10n.newCombat),
-        content: TextField(
-          controller: controller,
-          decoration: InputDecoration(hintText: l10n.encounterName),
-          autofocus: true,
-          keyboardType: TextInputType.text,
-        ),
-        actions: [
-          TextButton(
-            onPressed: () => Navigator.pop(context),
-            child: Text(l10n.cancel, textAlign: TextAlign.center),
-          ),
-          TextButton(
-            onPressed: () async {
-              if (controller.text.isNotEmpty) {
-                try {
-                  await ref
-                      .read(combatControllerProvider.notifier)
-                      .addCombat(controller.text);
-                  if (context.mounted) Navigator.pop(context);
-                } catch (e) {
-                  if (context.mounted) {
-                    Navigator.pop(context); // Close dialog first
-                    showDialog(
-                      context: context,
-                      builder: (context) => AlertDialog(
-                        title: const Text('Erro'),
-                        content: Text('Falha ao criar combate: $e'),
-                        actions: [
-                          TextButton(
-                            onPressed: () => Navigator.pop(context),
-                            child: const Text('OK', textAlign: TextAlign.center),
-                          ),
-                        ],
-                      ),
-                    );
-                  }
-                }
-              }
-            },
-            child: Text(l10n.create, textAlign: TextAlign.center),
-          ),
-        ],
+  void _showAddCombatDialog(BuildContext context, WidgetRef ref) {
+    Navigator.of(context).push(
+      MaterialPageRoute(
+        builder: (context) => const CreateCombatScreen(),
       ),
     );
+  }
+
+  Future<void> _createCombat(
+      BuildContext context, WidgetRef ref, TextEditingController controller) async {
+    if (controller.text.isNotEmpty) {
+      try {
+        await ref
+            .read(combatControllerProvider.notifier)
+            .addCombat(controller.text);
+        if (context.mounted) Navigator.pop(context);
+      } catch (e) {
+        if (context.mounted) {
+          // Close the bottom sheet if open, or show error on top
+          // For simplicity, we just show a snackbar or dialog here
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(content: Text('Erro: $e')),
+          );
+        }
+      }
+    }
   }
 }

@@ -7,8 +7,25 @@ import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:dnd_combat_tracker/l10n/app_localizations.dart';
 import 'presentation/providers/theme_provider.dart';
 
-void main() {
+import 'package:hive_flutter/hive_flutter.dart';
+import 'data/models/combat.dart';
+import 'data/models/combatant.dart';
+
+void main() async {
   WidgetsFlutterBinding.ensureInitialized();
+  
+  // Initialize Hive
+  await Hive.initFlutter();
+  
+  // Register Adapters
+  Hive.registerAdapter(CombatAdapter());
+  Hive.registerAdapter(CombatantAdapter());
+  Hive.registerAdapter(CombatStatusAdapter());
+  
+  // Open Boxes
+  await Hive.openBox<Combat>('combats');
+  await Hive.openBox<Combatant>('combatants');
+
   runApp(const ProviderScope(child: MyApp()));
 }
 
@@ -36,6 +53,7 @@ class MyApp extends ConsumerWidget {
           onSecondary: Colors.black,
         ),
         textTheme: GoogleFonts.interTextTheme(ThemeData.light().textTheme),
+        // textTheme: ThemeData.light().textTheme,
         appBarTheme: const AppBarTheme(
           backgroundColor: Color(0xFF3F51B5),
           foregroundColor: Colors.white,
@@ -59,6 +77,7 @@ class MyApp extends ConsumerWidget {
           onSecondary: Colors.black,
         ),
         textTheme: GoogleFonts.interTextTheme(ThemeData.dark().textTheme),
+        // textTheme: ThemeData.dark().textTheme,
         appBarTheme: const AppBarTheme(
           backgroundColor: Color(0xFF1E1E2C),
           foregroundColor: Colors.white,

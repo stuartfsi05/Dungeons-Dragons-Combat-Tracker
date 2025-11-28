@@ -5,7 +5,7 @@ buildscript {
     }
     dependencies {
         classpath("com.android.tools.build:gradle:7.3.0")
-        classpath("org.jetbrains.kotlin:kotlin-gradle-plugin:1.7.10")
+        classpath("org.jetbrains.kotlin:kotlin-gradle-plugin:1.9.0")
     }
 }
 
@@ -15,15 +15,15 @@ allprojects {
         mavenCentral()
     }
     // Force properties for all projects including plugins
-    extra["compileSdkVersion"] = 36
-    extra["targetSdkVersion"] = 36
+    extra["compileSdkVersion"] = 34
+    extra["targetSdkVersion"] = 34
     extra["minSdkVersion"] = 23
-    extra["flutter.compileSdkVersion"] = 36
+    extra["flutter.compileSdkVersion"] = 34
 
     configurations.all {
         resolutionStrategy {
-            force("androidx.core:core:1.6.0")
-            force("androidx.core:core-ktx:1.6.0")
+            force("androidx.core:core:1.13.1")
+            force("androidx.core:core-ktx:1.13.1")
         }
     }
 }
@@ -59,7 +59,7 @@ subprojects {
     // Force compileSdk version for all Android libraries to prevent lStar/resource errors
     plugins.withId("com.android.library") {
         val android = extensions.findByType(com.android.build.gradle.LibraryExtension::class.java)
-        android?.compileSdk = 36
+        android?.compileSdk = 34
     }
 }
 
