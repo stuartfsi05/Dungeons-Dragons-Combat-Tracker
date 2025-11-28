@@ -16,12 +16,12 @@ class HiveCombatRepository implements ICombatRepository {
 
   @override
   Stream<List<Combat>> watchCombats() {
-    return combatBox.watch().map((event) => combatBox.values.toList());
+    return combatBox.watch().map((event) => combatBox.values.toList()).startWith(combatBox.values.toList());
   }
 
   @override
   Stream<Combat?> watchCombat(int id) {
-    return combatBox.watch(key: id).map((event) => combatBox.get(id));
+    return combatBox.watch(key: id).map((event) => combatBox.get(id)).startWith(combatBox.get(id));
   }
 
   @override
